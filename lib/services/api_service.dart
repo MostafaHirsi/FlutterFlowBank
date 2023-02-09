@@ -1,8 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-
-import '../models/account.dart';
 
 class ApiService {
   final String baseUrl = "https://interview-backend-3enbou53tq-uc.a.run.app";
@@ -17,7 +16,7 @@ class ApiService {
     return response.data;
   }
 
-  Future<String> postAccount(String encryptedValue) async {
+  Future<String> createAccount(String encryptedValue) async {
     Response response =
         await dio.post('/account', data: {"encryptedRequest": encryptedValue});
     if (response.statusCode == 200) {
@@ -27,9 +26,17 @@ class ApiService {
     throw HttpException(response.data);
   }
 
-  Future<String> postEncrypt(Account account) async {
-    Response response = await dio.post('/account', data: account.toJson());
-    if (response.statusCode == 200) {}
+  Future<String> encryptValue(Map<String, dynamic> plainValue) async {
+    Response response =
+        await dio.post('/encrypt', data: jsonEncode(plainValue));
+    Map<String, dynamic> decodedEncryptedData = response.data;
+    return decodedEncryptedData['encryptedResponse'];
+  }
+
+  Future<Map<String, dynamic>> decryptValue(String encryptedValue) async {
+    String encodedRequestData = jsonEncode(
+        {"encryptedString": "KX5by8icYBVUsmpWTh78jQxKoQT678/02ez2VFEJ5Yw="});
+    Response response = await dio.post('/decrypt', data: encodedRequestData);
     return response.data;
   }
 }
