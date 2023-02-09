@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_flow_bank">
+    package="com.mostafa.flutter_flow_bank">
    <application
         android:label="flutter_flow_bank"
         android:name="${applicationName}"
