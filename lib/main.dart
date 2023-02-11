@@ -26,7 +26,7 @@ class MainApp extends StatelessWidget {
           onSurface: Color(0xFF535353),
         ),
       ),
-      home: IntroPage(),
+      home: const IntroPage(),
     );
   }
 }

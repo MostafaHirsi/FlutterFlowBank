@@ -7,9 +7,9 @@ part of 'dependent.dart';
 // **************************************************************************
 
 Dependent _$DependentFromJson(Map<String, dynamic> json) => Dependent(
-      json['dependent'] as String,
+      json['name'] as String,
     );
 
 Map<String, dynamic> _$DependentToJson(Dependent instance) => <String, dynamic>{
-      'dependent': instance.dependent,
+      'name': instance.name,
     };
