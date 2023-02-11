@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_flow_bank/pages/onboarding/onboarding_page.dart';
 import 'package:flutter_flow_bank/utils/assets.dart';
 import 'package:flutter_flow_bank/utils/spacing.dart';
 import 'package:flutter_flow_bank/widgets/primary_button.dart';
 
 class IntroPage extends StatelessWidget {
+  static const String routeName = 'IntroPage';
   const IntroPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: Spacing.m),
+        margin: EdgeInsets.only(
+            left: Spacing.m, right: Spacing.m, bottom: Spacing.m),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -34,11 +37,11 @@ class IntroPage extends StatelessWidget {
             const Spacer(
               flex: 6,
             ),
-            const PrimaryButton(
+            PrimaryButton(
               buttonText: "Sign up",
-            ),
-            const Spacer(
-              flex: 1,
+              onPressed: () {
+                Navigator.pushNamed(context, OnboardingPage.routeName);
+              },
             ),
           ],
         ),
