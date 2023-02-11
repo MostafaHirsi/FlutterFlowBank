@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_flow_bank/models/address.dart';
+import 'package:flutter_flow_bank/models/dependent.dart';
 import 'package:flutter_flow_bank/models/user_account.dart';
 import 'package:flutter_flow_bank/models/bank_account.dart';
 import 'package:flutter_flow_bank/services/api_service.dart';

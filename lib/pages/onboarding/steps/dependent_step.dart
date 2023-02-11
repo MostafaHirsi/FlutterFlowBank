@@ -3,8 +3,10 @@ import 'package:flutter_flow_bank/models/dependent.dart';
 import 'package:flutter_flow_bank/pages/onboarding/widgets/dependents_modal.dart';
 import 'package:flutter_flow_bank/utils/list.dart';
 import 'package:flutter_flow_bank/utils/spacing.dart';
+import 'package:flutter_flow_bank/widgets/primary_button.dart';
 
 class DependentStep extends StatelessWidget {
+  final Function() validate;
   final List<Dependent> dependents;
   final Function(Dependent) onDependentSaved;
   final Function(Dependent) onDependentDeleted;
@@ -13,14 +15,20 @@ class DependentStep extends StatelessWidget {
     required this.onDependentSaved,
     required this.dependents,
     required this.onDependentDeleted,
+    required this.validate,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Flexible(
+        Expanded(
           child: buildDependentsListView(),
+        ),
+        PrimaryButton(
+          buttonText: 'Continue',
+          onPressed: validate,
         ),
       ],
     );

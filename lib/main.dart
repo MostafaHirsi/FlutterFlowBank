@@ -1,10 +1,25 @@
+import 'dart:ui';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_flow_bank/services/api_service.dart';
+import 'package:injector/injector.dart';
+import 'package:flutter_flow_bank/blocs/camera/camera_bloc.dart';
+import 'package:flutter_flow_bank/blocs/onboard/onboard_bloc.dart';
 import 'package:flutter_flow_bank/pages/intro/intro_page.dart';
 import 'package:flutter_flow_bank/pages/onboarding/onboarding_page.dart';
 import 'package:flutter_flow_bank/utils/spacing.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  Dio dio = Dio();
+  Injector.appInstance.registerDependency<Dio>(() => dio);
+  Injector.appInstance.registerDependency<ApiService>(() => ApiService(dio));
   runApp(const MainApp());
 }
 
@@ -13,6 +28,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ApiService apiService = Injector.appInstance.get<ApiService>();
     return MaterialApp(
       theme: ThemeData(
         colorScheme: const ColorScheme(
@@ -93,7 +109,17 @@ class MainApp extends StatelessWidget {
           case OnboardingPage.routeName:
             return PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) {
-                return OnboardingPage();
+                return MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => CameraBloc(),
+                    ),
+                    BlocProvider(
+                      create: (context) => OnboardBloc(apiService),
+                    ),
+                  ],
+                  child: OnboardingPage(),
+                );
               },
             );
           case IntroPage.routeName:

@@ -2,33 +2,54 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flow_bank/models/address.dart';
 import 'package:flutter_flow_bank/utils/spacing.dart';
+import 'package:flutter_flow_bank/widgets/primary_button.dart';
 import 'package:flutter_flow_bank/widgets/text_form_field.dart';
 
 class AddressStep extends StatelessWidget {
+  final Function() validate;
   final Address address;
   final Function(Address) updateAddress;
   const AddressStep(
-      {super.key, required this.address, required this.updateAddress});
+      {super.key,
+      required this.address,
+      required this.updateAddress,
+      required this.validate});
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        buildInputFormField("Address Line 1",
-            (addressLine1) => updateAddressField(addressLine1: addressLine1)),
-        buildInputFormField("Address Line 2",
-            (addressLine2) => updateAddressField(addressLine2: addressLine2)),
-        buildInputFormField("City", (city) => updateAddressField(city: city)),
-        buildInputFormField(
-            "State/Province",
-            (stateProvince) =>
-                updateAddressField(stateProvince: stateProvince)),
-        buildCountryListPicker("Country",
-            (country) => updateAddressField(country: country), context),
-        buildInputFormField(
-            "Zip/Postal code",
-            (zipPostalCode) =>
-                updateAddressField(zipPostalCode: zipPostalCode)),
+        Expanded(
+          child: ListView(
+            children: [
+              buildInputFormField(
+                  "Address Line 1",
+                  (addressLine1) =>
+                      updateAddressField(addressLine1: addressLine1)),
+              buildInputFormField(
+                  "Address Line 2",
+                  (addressLine2) =>
+                      updateAddressField(addressLine2: addressLine2)),
+              buildInputFormField(
+                  "City", (city) => updateAddressField(city: city)),
+              buildInputFormField(
+                  "State/Province",
+                  (stateProvince) =>
+                      updateAddressField(stateProvince: stateProvince)),
+              buildCountryListPicker("Country",
+                  (country) => updateAddressField(country: country), context),
+              buildInputFormField(
+                  "Zip/Postal code",
+                  (zipPostalCode) =>
+                      updateAddressField(zipPostalCode: zipPostalCode)),
+            ],
+          ),
+        ),
+        PrimaryButton(
+          buttonText: 'Continue',
+          onPressed: validate,
+        ),
       ],
     );
   }
@@ -68,13 +89,13 @@ class AddressStep extends StatelessWidget {
 
   Widget buildCountryListPicker(
       String fieldName, Function(String?)? onSaved, context) {
-    Country country = Country.parse(address.country);
+    Country? country = Country.tryParse(address.country);
     return GestureDetector(
       onTap: () async {
         showCountryPicker(
           context: context,
           onSelect: (Country country) {
-            onSaved!(country.countryCode);
+            onSaved!(country.name);
           },
         );
       },
@@ -84,7 +105,7 @@ class AddressStep extends StatelessWidget {
         child: IgnorePointer(
           ignoring: true,
           child: TextFormField(
-            controller: TextEditingController(text: country.name),
+            controller: TextEditingController(text: country?.name ?? ""),
             decoration: InputDecoration(
               hintText: fieldName,
               suffixIcon: const Icon(
