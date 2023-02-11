@@ -34,4 +34,22 @@ class UserAccount extends Equatable {
         dependents,
         address
       ];
+
+  UserAccount copyWith(
+      {String? firstName,
+      String? middleName,
+      String? lastName,
+      DateTime? dateOfBirth,
+      String? gender,
+      List<Dependent>? dependents,
+      Address? address}) {
+    return UserAccount(
+        firstName ?? this.firstName,
+        middleName ?? this.middleName,
+        lastName ?? this.lastName,
+        dateOfBirth ?? this.dateOfBirth,
+        gender ?? this.gender,
+        dependents ?? this.dependents,
+        address ?? this.address);
+  }
 }

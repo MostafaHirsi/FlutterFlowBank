@@ -23,4 +23,22 @@ class Address extends Equatable {
   @override
   List<Object> get props =>
       [addressLine1, addressLine2, city, stateProvince, country, zipPostalCode];
+
+  Address copyWith({
+    String? addressLine1,
+    String? addressLine2,
+    String? city,
+    String? stateProvince,
+    String? country,
+    String? zipPostalCode,
+  }) {
+    return Address(
+      addressLine1 ?? this.addressLine1,
+      addressLine2 ?? this.addressLine2,
+      city ?? this.city,
+      stateProvince ?? this.stateProvince,
+      country ?? this.country,
+      zipPostalCode ?? this.zipPostalCode,
+    );
+  }
 }
