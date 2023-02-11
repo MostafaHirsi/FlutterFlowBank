@@ -14,10 +14,10 @@ class OnboardLoading extends OnboardState {
   List<Object> get props => [];
 }
 
-class OnboardComplete extends OnboardState {
+class OnboardSuccess extends OnboardState {
   final BankAccount bankAccount;
 
-  const OnboardComplete(this.bankAccount);
+  const OnboardSuccess(this.bankAccount);
 
   @override
   List<Object> get props => [bankAccount];

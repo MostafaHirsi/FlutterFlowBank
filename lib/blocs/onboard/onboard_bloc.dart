@@ -21,7 +21,7 @@ class OnboardBloc extends Bloc<OnboardEvent, OnboardState> {
               await apiService.createAccount(encryptedValueResponse);
           BankAccount bankAccount =
               await apiService.decryptValue(encryptedBankAccountResponse);
-          emit(OnboardComplete(bankAccount));
+          emit(OnboardSuccess(bankAccount));
         }
       } on DioError catch (dioError) {
         switch (dioError.response!.statusCode) {

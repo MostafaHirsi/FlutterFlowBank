@@ -20,14 +20,14 @@ void main() {
   Dependent dependent = Dependent('Junior');
   Address address = Address("12 Middleway", "Area B", "Main City", "Mainland",
       "General Country", "ML1 2HJ");
-  UserAccount account = UserAccount('John', 'Kevin', 'Doe',
+  UserAccount userAccount = UserAccount('John', 'Kevin', 'Doe',
       DateTime(1990, 10, 10), "male", [dependent], address);
 
   UserAccount emptyUserAccount =
-      UserAccount("", "", "", DateTime.now(), "male", [], address);
+      UserAccount("", "", "", DateTime(1800, 01, 01), "male", [], address);
 
-  UserAccount invalidUserAccount =
-      UserAccount("___", "___", "____", DateTime.now(), "___", [], address);
+  UserAccount invalidUserAccount = UserAccount(
+      "___", "___", "____", DateTime(1800, 01, 01), "___", [], address);
 
   const Map<String, dynamic> encryptedUserAccountRequest = {
     "encryptedResponse":
@@ -38,7 +38,7 @@ void main() {
             "wWvKNX1UN3EdL+n7RnNdgAcwNztOElmlMZkXVanJfLAqbH2FOMREuBmRFEZWB4pSdNlSQQ24abKY9p4Be2y64Q="
   };
 
-  const Map<String, dynamic> encryptedBankAccountSuccessResponse = {
+  const Map<String, dynamic> encryptedBankAccountResponse = {
     "encryptedResponse": "vy+yX5sQ6c0XYI30E4n+gTAssc2omHYcuuWTkHLX3oQ="
   };
 
@@ -49,40 +49,10 @@ void main() {
   BankAccount bankAccount = BankAccount("5339460");
 
   dioAdapter.onPost(
-    '/encrypt',
-    (server) async => server.reply(
-      403,
-      {'error': 'Invalid client request'},
-      delay: const Duration(seconds: 1),
-    ),
-    data: emptyUserAccount.toJson(),
-  );
-
-  dioAdapter.onPost(
-    '/encrypt',
-    (server) async => server.reply(
-      500,
-      {'error': 'Internal Server Error'},
-      delay: const Duration(seconds: 1),
-    ),
-    data: invalidUserAccount.toJson(),
-  );
-
-  dioAdapter.onPost(
-    '/encrypt',
-    (server) async => server.reply(
-      200,
-      encryptedUserAccountRequest,
-      delay: const Duration(seconds: 1),
-    ),
-    data: account.toJson(),
-  );
-
-  dioAdapter.onPost(
     '/account',
     (server) async => server.reply(
       200,
-      encryptedBankAccountSuccessResponse,
+      encryptedBankAccountResponse,
       delay: const Duration(seconds: 1),
     ),
     data: encryptedUserAccountRequest,
@@ -95,8 +65,7 @@ void main() {
       decryptedBankAccountResponse,
       delay: const Duration(seconds: 1),
     ),
-    data: encryptedBankAccountSuccessResponse[
-        'encryptedBankAccountSuccessResponse'],
+    data: encryptedBankAccountResponse['encryptedBankAccountSuccessResponse'],
   );
   ApiService apiService = ApiService(dio);
 
@@ -104,17 +73,39 @@ void main() {
     blocTest<OnboardBloc, OnboardState>(
       'Add CommitOnboarding to onboardBloc with a user account, should succeed and returns a bank account',
       build: () => OnboardBloc(apiService),
+      setUp: () {
+        dioAdapter.onPost(
+          '/encrypt',
+          (server) async => server.reply(
+            200,
+            encryptedUserAccountRequest,
+            delay: const Duration(seconds: 1),
+          ),
+          data: userAccount.toJson(),
+        );
+      },
       act: (bloc) => bloc.add(
-        CommitOnboarding(account),
+        CommitOnboarding(userAccount),
       ),
       wait: const Duration(
         seconds: 10,
       ),
-      expect: () => [OnboardLoading(), OnboardComplete(bankAccount)],
+      expect: () => [OnboardLoading(), OnboardSuccess(bankAccount)],
     );
     blocTest<OnboardBloc, OnboardState>(
       "Add CommitOnboarding to onboardBloc with an empty user account, should fail and return onboardError state with message 'Seems like you missed something out, please enter valid entries into the fields'",
       build: () => OnboardBloc(apiService),
+      setUp: () {
+        dioAdapter.onPost(
+          '/encrypt',
+          (server) async => server.reply(
+            403,
+            {'error': 'Invalid client request'},
+            delay: const Duration(seconds: 1),
+          ),
+          data: emptyUserAccount.toJson(),
+        );
+      },
       act: (bloc) => bloc.add(
         CommitOnboarding(emptyUserAccount),
       ),
@@ -130,6 +121,17 @@ void main() {
     blocTest<OnboardBloc, OnboardState>(
       "Add CommitOnboarding to onboardBloc with an empty user account, should fail and return onboardError state with message 'Seems like something went wrong, please try again later'",
       build: () => OnboardBloc(apiService),
+      setUp: () {
+        dioAdapter.onPost(
+          '/encrypt',
+          (server) async => server.reply(
+            500,
+            {'error': 'Internal Server Error'},
+            delay: const Duration(seconds: 1),
+          ),
+          data: invalidUserAccount.toJson(),
+        );
+      },
       act: (bloc) => bloc.add(
         CommitOnboarding(invalidUserAccount),
       ),
