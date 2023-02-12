@@ -59,7 +59,7 @@ class LivenessCheckStep extends StatelessWidget {
                 cameraBloc.add(CameraClose());
               },
               takePhoto: () {
-                cameraBloc.add(CameraCapture(cameraController));
+                cameraBloc.add(CameraCapture());
               },
             );
           }

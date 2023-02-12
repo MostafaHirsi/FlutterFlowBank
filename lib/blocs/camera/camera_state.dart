@@ -18,9 +18,7 @@ class CameraInitiating extends CameraState {
 
 class CameraInitiated extends CameraState {
   final CameraController cameraController;
-  final List<CameraDescription> cameras;
-  CameraInitiated(this.cameras, this.cameraController)
-      : super([cameras, cameraController]);
+  CameraInitiated(this.cameraController) : super([cameraController]);
 }
 
 class CameraCapturing extends CameraState {

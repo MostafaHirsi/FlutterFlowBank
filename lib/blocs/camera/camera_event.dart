@@ -13,8 +13,7 @@ class CameraInitiate extends CameraEvent {
 }
 
 class CameraCapture extends CameraEvent {
-  final CameraController cameraController;
-  CameraCapture(this.cameraController) : super([cameraController]);
+  CameraCapture() : super([]);
 }
 
 class CameraReInitiate extends CameraEvent {
