@@ -8,6 +8,8 @@ class InputFormField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final EdgeInsets? margin;
   final Function(String?)? onSaved;
+  final String? initialValue;
+  final Function(String)? onFieldSubmitted;
 
   InputFormField(
       {super.key,
@@ -15,14 +17,18 @@ class InputFormField extends StatelessWidget {
       this.validator,
       this.margin,
       this.onSaved,
-      this.textInputAction});
+      this.textInputAction,
+      this.initialValue,
+      this.onFieldSubmitted});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: margin ?? EdgeInsets.symmetric(vertical: Spacing.s),
       child: TextFormField(
+        initialValue: initialValue,
         textCapitalization: TextCapitalization.words,
+        onFieldSubmitted: onFieldSubmitted,
         textInputAction: textInputAction ?? TextInputAction.done,
         validator: validator,
         onSaved: onSaved,

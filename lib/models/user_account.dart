@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_flow_bank/models/address.dart';
@@ -15,9 +16,10 @@ class UserAccount extends Equatable {
   final String gender;
   final List<Dependent> dependents;
   final Address address;
+  final String photo;
 
   UserAccount(this.firstName, this.middleName, this.lastName, this.dateOfBirth,
-      this.gender, this.dependents, this.address);
+      this.gender, this.dependents, this.address, this.photo);
 
   factory UserAccount.fromJson(Map<String, dynamic> json) =>
       _$UserAccountFromJson(json);
@@ -32,7 +34,8 @@ class UserAccount extends Equatable {
         dateOfBirth,
         gender,
         dependents,
-        address
+        address,
+        photo,
       ];
 
   UserAccount copyWith(
@@ -42,7 +45,8 @@ class UserAccount extends Equatable {
       DateTime? dateOfBirth,
       String? gender,
       List<Dependent>? dependents,
-      Address? address}) {
+      Address? address,
+      String? photo}) {
     return UserAccount(
         firstName ?? this.firstName,
         middleName ?? this.middleName,
@@ -50,6 +54,7 @@ class UserAccount extends Equatable {
         dateOfBirth ?? this.dateOfBirth,
         gender ?? this.gender,
         dependents ?? this.dependents,
-        address ?? this.address);
+        address ?? this.address,
+        photo ?? this.photo);
   }
 }

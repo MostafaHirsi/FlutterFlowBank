@@ -4,8 +4,8 @@ import '../utils/spacing.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String buttonText;
-  final Icon? icon;
-  final Function() onPressed;
+  final Widget? icon;
+  final Function()? onPressed;
   final EdgeInsets? margin;
   const PrimaryButton(
       {super.key,
@@ -19,24 +19,38 @@ class PrimaryButton extends StatelessWidget {
     return Container(
       margin:
           margin ?? EdgeInsets.symmetric(vertical: Spacing.s, horizontal: 0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          padding:
-              EdgeInsets.symmetric(horizontal: Spacing.m, vertical: Spacing.s),
-          tapTargetSize: MaterialTapTargetSize.padded,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(
-                8,
-              ),
+      child: icon != null
+          ? ElevatedButton.icon(
+              icon: icon!,
+              style: buildStyle(),
+              onPressed: onPressed,
+              label: buildChild(),
+            )
+          : ElevatedButton(
+              style: buildStyle(),
+              onPressed: onPressed,
+              child: buildChild(),
             ),
-          ),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          buttonText,
-          style: const TextStyle(
-            fontSize: 16,
+    );
+  }
+
+  Text buildChild() {
+    return Text(
+      buttonText,
+      style: const TextStyle(
+        fontSize: 16,
+      ),
+    );
+  }
+
+  ButtonStyle buildStyle() {
+    return ElevatedButton.styleFrom(
+      padding: EdgeInsets.symmetric(horizontal: Spacing.m, vertical: Spacing.s),
+      tapTargetSize: MaterialTapTargetSize.padded,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(
+            8,
           ),
         ),
       ),

@@ -47,5 +47,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Permission to use your camera for the liveness check</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Permission to use your microphone for the liveness check</string>
 </dict>
 </plist>
