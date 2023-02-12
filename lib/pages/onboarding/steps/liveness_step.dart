@@ -4,9 +4,9 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_flow_bank/blocs/camera/camera_bloc.dart';
-import 'package:flutter_flow_bank/pages/onboarding/steps/liveness_step/camera_prep.dart';
-import 'package:flutter_flow_bank/pages/onboarding/steps/liveness_step/camera_preview.dart';
-import 'package:flutter_flow_bank/pages/onboarding/steps/liveness_step/picture_view.dart';
+import 'package:flutter_flow_bank/pages/onboarding/widgets/liveness_step/camera_prep.dart';
+import 'package:flutter_flow_bank/pages/onboarding/widgets/liveness_step/camera_preview.dart';
+import 'package:flutter_flow_bank/pages/onboarding/widgets/liveness_step/picture_view.dart';
 import 'package:flutter_flow_bank/utils/camera.dart';
 import 'package:flutter_flow_bank/utils/spacing.dart';
 
@@ -70,7 +70,7 @@ class LivenessCheckStep extends StatelessWidget {
               retakePhoto: () {
                 cameraBloc.add(CameraReInitiate());
               },
-              onProceedWithPhoto: (image) {},
+              onProceedWithPhoto: onLivenessComplete,
             );
           }
 

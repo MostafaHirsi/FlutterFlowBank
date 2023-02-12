@@ -4,8 +4,8 @@ import '../utils/spacing.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String buttonText;
-  final Icon? icon;
-  final Function() onPressed;
+  final Widget? icon;
+  final Function()? onPressed;
   final EdgeInsets? margin;
   const PrimaryButton(
       {super.key,

@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_flow_bank/models/bank_account.dart';
+import 'package:flutter_flow_bank/pages/success/success_page.dart';
 import 'package:flutter_flow_bank/services/api_service.dart';
 import 'package:injector/injector.dart';
 import 'package:flutter_flow_bank/blocs/camera/camera_bloc.dart';
@@ -106,6 +108,15 @@ class MainApp extends StatelessWidget {
       home: const IntroPage(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
+          case SuccessPage.routeName:
+            return PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) {
+                BankAccount bankAccount = settings.arguments as BankAccount;
+                return SuccessPage(
+                  bankAccount: bankAccount,
+                );
+              },
+            );
           case OnboardingPage.routeName:
             return PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) {

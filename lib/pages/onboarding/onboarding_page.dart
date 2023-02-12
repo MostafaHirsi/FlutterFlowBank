@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_flow_bank/blocs/camera/camera_bloc.dart';
+import 'package:flutter_flow_bank/blocs/onboard/onboard_bloc.dart';
 import 'package:flutter_flow_bank/models/address.dart';
 import 'package:flutter_flow_bank/models/dependent.dart';
 import 'package:flutter_flow_bank/models/user_account.dart';
@@ -13,12 +12,10 @@ import 'package:flutter_flow_bank/pages/onboarding/steps/dob_step.dart';
 import 'package:flutter_flow_bank/pages/onboarding/steps/gender_step.dart';
 import 'package:flutter_flow_bank/pages/onboarding/steps/liveness_step.dart';
 import 'package:flutter_flow_bank/pages/onboarding/steps/name_step.dart';
-import 'package:flutter_flow_bank/pages/onboarding/widgets/gender_modal.dart';
+import 'package:flutter_flow_bank/pages/onboarding/steps/submission_step.dart';
+import 'package:flutter_flow_bank/pages/success/success_page.dart';
 import 'package:flutter_flow_bank/utils/camera.dart';
 import 'package:flutter_flow_bank/utils/spacing.dart';
-import 'package:flutter_flow_bank/widgets/date_picker_field.dart';
-import 'package:flutter_flow_bank/widgets/dropdown_field.dart';
-import 'package:flutter_flow_bank/widgets/primary_button.dart';
 import 'package:flutter_flow_bank/widgets/secondary_button.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -70,7 +67,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   }
                 },
               ),
-              // title: Text(pageTitles[pageIndex]),
             )
           : null,
       body: Container(
@@ -87,28 +83,69 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   Widget buildPageView() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          child: PageView(
-            controller: pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            pageSnapping: true,
-            onPageChanged: (value) {
-              pageIndex = value;
-            },
+    OnboardBloc onboardBloc = BlocProvider.of(context);
+    return BlocListener(
+      bloc: onboardBloc,
+      listener: (context, state) {
+        if (state is OnboardSuccess) {
+          Navigator.pushNamed(context, SuccessPage.routeName,
+              arguments: state.bankAccount);
+        }
+
+        if (state is OnboardError) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text("Something seems to have gone wrong"),
+              content: Text("Please try again later"),
+              actions: [
+                SecondaryButton(
+                    buttonText: "OK", onPressed: () => Navigator.pop(context)),
+              ],
+            ),
+          );
+        }
+      },
+      child: BlocBuilder<OnboardBloc, OnboardState>(
+        builder: (context, state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              buildNameStep(),
-              buildGenderField(),
-              buildDobPicker(),
-              buildDependentStep(),
-              buildAddressStep(),
-              buildCameraStep(),
+              Expanded(
+                child: PageView(
+                  controller: pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  pageSnapping: true,
+                  onPageChanged: (value) {
+                    pageIndex = value;
+                  },
+                  children: [
+                    buildNameStep(),
+                    buildGenderField(),
+                    buildDobPicker(),
+                    buildDependentStep(),
+                    buildAddressStep(),
+                    buildCameraStep(),
+                    buildSubmissionStep(state, userAccount),
+                  ],
+                ),
+              ),
             ],
-          ),
-        ),
-      ],
+          );
+        },
+      ),
+    );
+  }
+
+  SubmissionStep buildSubmissionStep(
+      OnboardState state, UserAccount userAccount) {
+    OnboardBloc onboardBloc = BlocProvider.of(context);
+    return SubmissionStep(
+      state: state,
+      userAccount: userAccount,
+      onSubmit: () {
+        onboardBloc.add(CommitOnboarding(userAccount));
+      },
     );
   }
 
@@ -116,7 +153,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      if (pageIndex < 5) {
+      if (pageIndex < 6) {
         await pageController.animateToPage(
           ++pageIndex,
           duration: const Duration(milliseconds: 400),
@@ -125,7 +162,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         setState(() {
           pageIndex;
         });
-      } else {}
+      }
     }
   }
 
@@ -139,6 +176,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       onLivenessComplete: (photo) {
         String encodedPhoto = base64Encode(photo);
         updateUserAccount(photo: encodedPhoto);
+        validate();
       },
     );
   }

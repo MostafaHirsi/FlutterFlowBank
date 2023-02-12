@@ -21,15 +21,15 @@ void main() {
   );
 
   UserAccount userAccount = UserAccount(
-    "Mostafa",
-    "Mahamud",
-    "Hirsi",
-    DateTime(1992, 9, 2),
-    "male",
-    [Dependent("Salma"), Dependent("Habon")],
-    Address("Flat 1", "100 Main Road", "Middle City", "Middlelands",
-        "United Kingdom", "MC3 2AD"),
-  );
+      "Mostafa",
+      "Mahamud",
+      "Hirsi",
+      DateTime(1992, 9, 2),
+      "male",
+      [Dependent("Salma"), Dependent("Habon")],
+      Address("Flat 1", "100 Main Road", "Middle City", "Middlelands",
+          "United Kingdom", "MC3 2AD"),
+      '');
 
   print(userAccount.toJson());
 

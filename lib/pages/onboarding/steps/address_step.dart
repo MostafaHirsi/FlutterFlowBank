@@ -48,7 +48,9 @@ class AddressStep extends StatelessWidget {
         ),
         PrimaryButton(
           buttonText: 'Continue',
-          onPressed: validate,
+          onPressed: () {
+            validate();
+          },
         ),
       ],
     );
@@ -73,9 +75,9 @@ class AddressStep extends StatelessWidget {
   }
 
   InputFormField buildInputFormField(
-      String fieldName, Function(String?)? onSaved) {
+      String fieldName, Function(String)? onSaved) {
     return InputFormField(
-      onSaved: (savedValue) => onSaved,
+      onFieldSubmitted: onSaved,
       hintText: fieldName,
       textInputAction: TextInputAction.next,
       validator: (value) {

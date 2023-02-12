@@ -22,7 +22,8 @@ class ApiService {
     Response response =
         await dio.post('/account', data: {"encryptedRequest": encryptedValue});
     if (response.statusCode == 200) {
-      String encryptedResponse = response.data['encryptedResponse'];
+      Map<String, dynamic> decodedResponse = jsonDecode(response.data);
+      String encryptedResponse = decodedResponse['encryptedResponse'];
       return encryptedResponse;
     }
     throw HttpException(response.data['error']);
@@ -30,8 +31,8 @@ class ApiService {
 
   Future<String> encryptValue(Map<String, dynamic> plainValue) async {
     Response response =
-        await dio.post('/encrypt', data: jsonEncode(plainValue));
-    Map<String, dynamic> decodedEncryptedData = response.data;
+        await dio.post('/echo/encrypt', data: jsonEncode(plainValue));
+    Map<String, dynamic> decodedEncryptedData = jsonDecode(response.data);
     if (response.statusCode == 200) {
       return decodedEncryptedData['encryptedResponse'];
     }
@@ -39,11 +40,11 @@ class ApiService {
   }
 
   Future<BankAccount> decryptValue(String encryptedValue) async {
-    String encodedRequestData = jsonEncode(
-        {"encryptedString": "KX5by8icYBVUsmpWTh78jQxKoQT678/02ez2VFEJ5Yw="});
-    Response response = await dio.post('/decrypt', data: encodedRequestData);
+    String encodedRequestData = jsonEncode({"encryptedString": encryptedValue});
+    Response response =
+        await dio.post('/echo/decrypt', data: encodedRequestData);
     if (response.statusCode == 200) {
-      return BankAccount.fromJson(response.data);
+      return BankAccount.fromJson(jsonDecode(response.data));
     }
     throw HttpException(response.data['error']);
   }

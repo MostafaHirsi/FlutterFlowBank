@@ -52,9 +52,12 @@ class PictureView extends StatelessWidget {
           ),
         ),
         PrimaryButton(
-            icon: Icon(Icons.check),
-            buttonText: "My selfie is clear",
-            onPressed: () async {}),
+          icon: Icon(Icons.check),
+          buttonText: "My selfie is clear",
+          onPressed: () {
+            onProceedWithPhoto(image);
+          },
+        ),
         SecondaryButton(
           icon: Icon(Icons.replay),
           buttonText: "Retake Photo",

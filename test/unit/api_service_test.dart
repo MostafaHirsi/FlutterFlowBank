@@ -21,13 +21,13 @@ void main() {
   Address address = Address("12 Middleway", "Area B", "Main City", "Mainland",
       "General Country", "ML1 2HJ");
   UserAccount userAccount = UserAccount('John', 'Kevin', 'Doe',
-      DateTime(1990, 10, 10), "male", [dependent], address);
+      DateTime(1990, 10, 10), "male", [dependent], address, '');
 
   UserAccount emptyUserAccount =
-      UserAccount("", "", "", DateTime(1800, 01, 01), "male", [], address);
+      UserAccount("", "", "", DateTime(1800, 01, 01), "male", [], address, '');
 
   UserAccount invalidUserAccount = UserAccount(
-      "___", "___", "____", DateTime(1800, 01, 01), "___", [], address);
+      "___", "___", "____", DateTime(1800, 01, 01), "___", [], address, '');
 
   const Map<String, dynamic> encryptedUserAccountRequest = {
     "encryptedResponse":
