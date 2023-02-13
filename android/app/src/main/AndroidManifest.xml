@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mostafa.flutter_flow_bank">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="flutter_flow_bank"
         android:name="${applicationName}"
