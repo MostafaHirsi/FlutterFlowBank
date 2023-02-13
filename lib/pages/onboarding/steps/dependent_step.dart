@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flow_bank/models/dependent.dart';
 import 'package:flutter_flow_bank/pages/onboarding/widgets/dependents_modal.dart';
+import 'package:flutter_flow_bank/pages/onboarding/widgets/step_heading.dart';
 import 'package:flutter_flow_bank/utils/list.dart';
 import 'package:flutter_flow_bank/utils/spacing.dart';
 import 'package:flutter_flow_bank/widgets/primary_button.dart';
@@ -20,9 +21,16 @@ class DependentStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Container(
+      padding:
+          EdgeInsets.only(left: Spacing.m, right: Spacing.m, bottom: Spacing.m),
+      child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        const StepHeading(
+            heading: "Dependents",
+            subHeading:
+                "Enter the names of the dependents that rely on your income"),
         Expanded(
           child: buildDependentsListView(),
         ),
@@ -31,7 +39,7 @@ class DependentStep extends StatelessWidget {
           onPressed: validate,
         ),
       ],
-    );
+    ),);
   }
 
   ListView buildDependentsListView() {

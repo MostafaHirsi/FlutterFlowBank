@@ -16,8 +16,6 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
       try {
         if (event is CameraInitiate) {
           emit(CameraInitiating());
-          List<CameraDescription> cameras =
-              await cameraService.getListofCameras();
           await cameraService.initialiseController();
           emit(CameraInitiated(cameraService.cameraController));
         }

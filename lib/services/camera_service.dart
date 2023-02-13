@@ -6,14 +6,8 @@ class CameraService {
   late List<CameraDescription> _cameras;
   late CameraController _cameraController;
 
-  Future<List<CameraDescription>> getListofCameras() async {
-    if (_cameras != null) {
-      _cameras = await availableCameras();
-    }
-    return _cameras;
-  }
-
   Future<void> initialiseController() async {
+    _cameras = await availableCameras();
     CameraDescription firstSelfieCamera = _cameras.firstWhere(
       (camera) => camera.lensDirection == CameraLensDirection.front,
       orElse: () {
@@ -34,8 +28,6 @@ class CameraService {
   void shutDown() {
     _cameraController.dispose();
   }
-
-  List<CameraDescription> get cameras => _cameras;
 
   CameraController get cameraController => _cameraController;
 }

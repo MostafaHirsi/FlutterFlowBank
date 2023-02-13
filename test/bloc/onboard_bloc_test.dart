@@ -23,11 +23,11 @@ void main() {
   UserAccount userAccount = UserAccount('John', 'Kevin', 'Doe',
       DateTime(1990, 10, 10), "male", [dependent], address, '');
 
-  UserAccount emptyUserAccount =
-      UserAccount("", "", "", DateTime(1800, 01, 01), "male", [], address, '');
+  UserAccount emptyUserAccount = UserAccount(
+      "", "", "", DateTime(1800, 01, 01), "male", const [], address, '');
 
-  UserAccount invalidUserAccount = UserAccount(
-      "___", "___", "____", DateTime(1800, 01, 01), "___", [], address, '');
+  UserAccount invalidUserAccount = UserAccount("___", "___", "____",
+      DateTime(1800, 01, 01), "___", const [], address, '');
 
   const Map<String, dynamic> encryptedUserAccountResponse = {
     "encryptedResponse":
@@ -114,7 +114,7 @@ void main() {
       ),
       expect: () => [
         OnboardLoading(),
-        const OnboardError(
+        OnboardError(
             "Seems like you missed something out, please enter valid entries into the fields")
       ],
     );
@@ -140,8 +140,7 @@ void main() {
       ),
       expect: () => [
         OnboardLoading(),
-        const OnboardError(
-            "Seems like something went wrong, please try again later")
+        OnboardError("Seems like something went wrong, please try again later")
       ],
     );
   });

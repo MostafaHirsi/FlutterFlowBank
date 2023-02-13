@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_flow_bank/utils/spacing.dart';
 
 class InputFormField extends StatelessWidget {
-  final String? hintText;
+  final String hintText;
   final String? Function(String?)? validator;
   final TextInputAction? textInputAction;
   final EdgeInsets? margin;
@@ -13,7 +13,7 @@ class InputFormField extends StatelessWidget {
 
   InputFormField(
       {super.key,
-      this.hintText,
+      required this.hintText,
       this.validator,
       this.margin,
       this.onSaved,
@@ -26,6 +26,7 @@ class InputFormField extends StatelessWidget {
     return Container(
       margin: margin ?? EdgeInsets.symmetric(vertical: Spacing.s),
       child: TextFormField(
+        key: Key(hintText),
         initialValue: initialValue,
         textCapitalization: TextCapitalization.words,
         onFieldSubmitted: onFieldSubmitted,

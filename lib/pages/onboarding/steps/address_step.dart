@@ -1,6 +1,7 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flow_bank/models/address.dart';
+import 'package:flutter_flow_bank/pages/onboarding/widgets/step_heading.dart';
 import 'package:flutter_flow_bank/utils/spacing.dart';
 import 'package:flutter_flow_bank/widgets/primary_button.dart';
 import 'package:flutter_flow_bank/widgets/text_form_field.dart';
@@ -17,42 +18,49 @@ class AddressStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          child: ListView(
-            children: [
-              buildInputFormField(
-                  "Address Line 1",
-                  (addressLine1) =>
-                      updateAddressField(addressLine1: addressLine1)),
-              buildInputFormField(
-                  "Address Line 2",
-                  (addressLine2) =>
-                      updateAddressField(addressLine2: addressLine2)),
-              buildInputFormField(
-                  "City", (city) => updateAddressField(city: city)),
-              buildInputFormField(
-                  "State/Province",
-                  (stateProvince) =>
-                      updateAddressField(stateProvince: stateProvince)),
-              buildCountryListPicker("Country",
-                  (country) => updateAddressField(country: country), context),
-              buildInputFormField(
-                  "Zip/Postal code",
-                  (zipPostalCode) =>
-                      updateAddressField(zipPostalCode: zipPostalCode)),
-            ],
+    return Container(
+      padding:
+          EdgeInsets.only(left: Spacing.m, right: Spacing.m, bottom: Spacing.m),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const StepHeading(
+              heading: "Address",
+              subHeading: "Enter the address you reside in legally"),
+          Expanded(
+            child: ListView(
+              children: [
+                buildInputFormField(
+                    "Address Line 1",
+                    (addressLine1) =>
+                        updateAddressField(addressLine1: addressLine1)),
+                buildInputFormField(
+                    "Address Line 2",
+                    (addressLine2) =>
+                        updateAddressField(addressLine2: addressLine2)),
+                buildInputFormField(
+                    "City", (city) => updateAddressField(city: city)),
+                buildInputFormField(
+                    "State/Province",
+                    (stateProvince) =>
+                        updateAddressField(stateProvince: stateProvince)),
+                buildCountryListPicker("Country",
+                    (country) => updateAddressField(country: country), context),
+                buildInputFormField(
+                    "Zip/Postal code",
+                    (zipPostalCode) =>
+                        updateAddressField(zipPostalCode: zipPostalCode)),
+              ],
+            ),
           ),
-        ),
-        PrimaryButton(
-          buttonText: 'Continue',
-          onPressed: () {
-            validate();
-          },
-        ),
-      ],
+          PrimaryButton(
+            buttonText: 'Continue',
+            onPressed: () {
+              validate();
+            },
+          ),
+        ],
+      ),
     );
   }
 

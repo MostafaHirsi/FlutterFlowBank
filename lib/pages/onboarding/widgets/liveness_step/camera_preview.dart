@@ -15,53 +15,49 @@ class CameraView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: controller.value.aspectRatio,
-      child: Container(
-        alignment: Alignment.center,
-        child: Transform.scale(
-          scale: 1.25,
+    return Column(
+      children: [
+        Expanded(
+          flex: 7,
+          child: buildPreview(context),
+        ),
+        Flexible(
+          flex: 2,
+          child: buildCaptureButton(context),
+        ),
+      ],
+    );
+  }
+
+  Widget buildPreview(BuildContext context) {
+    return Transform.scale(
+      scale: 1.5,
+      child: AspectRatio(
+        aspectRatio: 1 / controller.value.aspectRatio,
+        child: ClipRRect(
           child: CameraPreview(
             controller,
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                buildOverlay(),
-                buildCaptureButton(),
-                buildBackButton(),
-              ],
-            ),
           ),
         ),
       ),
     );
   }
 
-  Positioned buildBackButton() {
-    return Positioned(
-      left: 35,
-      top: 45,
-      child: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_rounded,
-          color: Colors.white,
-        ),
-        onPressed: closePhoto,
-      ),
-    );
-  }
-
-  Positioned buildCaptureButton() {
-    return Positioned(
-      bottom: 30,
+  Widget buildCaptureButton(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.center,
       child: GestureDetector(
         onTap: takePhoto,
         child: Container(
           width: 65,
           height: 65,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.white60,
+            border: Border.all(
+              color: Theme.of(context).colorScheme.primary,
+              width: 3,
+            ),
           ),
         ),
       ),
@@ -78,7 +74,7 @@ class CameraView extends StatelessWidget {
               color: Colors.transparent,
             ),
             child: Align(
-              alignment: Alignment(0, -0.3),
+              alignment: const Alignment(0, -0.3),
               child: ClipOval(
                 child: Container(
                   height: 320,

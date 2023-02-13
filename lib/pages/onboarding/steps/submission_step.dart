@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -22,18 +23,22 @@ class SubmissionStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          child: buildDetailsList(context),
-        ),
-        PrimaryButton(
-          icon: state is OnboardLoading ? buildLoadingIndicator() : null,
-          buttonText: state is OnboardLoading ? "Submitting" : "Submit",
-          onPressed: state != OnboardLoading ? onSubmit : null,
-        )
-      ],
+    return Container(
+      padding:
+          EdgeInsets.only(left: Spacing.m, right: Spacing.m, bottom: Spacing.m),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: buildDetailsList(context),
+          ),
+          PrimaryButton(
+            icon: state is OnboardLoading ? buildLoadingIndicator() : null,
+            buttonText: state is OnboardLoading ? "Submitting" : "Submit",
+            onPressed: state != OnboardLoading ? onSubmit : null,
+          )
+        ],
+      ),
     );
   }
 
@@ -60,20 +65,28 @@ class SubmissionStep extends StatelessWidget {
         buildFieldItem("No of Dependents", "${userAccount.dependents.length}"),
         buildFieldItem("Address",
             "${userAccount.address.addressLine1}, ${userAccount.address.city}, ${userAccount.address.country}, ${userAccount.address.zipPostalCode} "),
-        Container(
-          margin: EdgeInsets.only(bottom: Spacing.m),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(
-              18,
-            ),
-            child: Container(
-              child: Image.memory(
-                base64Decode(userAccount.photo),
-              ),
-            ),
+        buildLivenessImage(),
+      ],
+    );
+  }
+
+  Container buildLivenessImage() {
+    Uint8List imageBytes = base64Decode(
+      userAccount.photo,
+    );
+    return Container(
+      margin: EdgeInsets.only(bottom: Spacing.m),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(
+          18,
+        ),
+        child: Image.memory(
+          imageBytes,
+          errorBuilder: (context, error, stackTrace) => const Center(
+            child: Icon(Icons.image),
           ),
         ),
-      ],
+      ),
     );
   }
 

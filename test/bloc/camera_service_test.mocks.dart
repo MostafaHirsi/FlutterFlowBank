@@ -41,11 +41,6 @@ class MockCameraService extends _i1.Mock implements _i3.CameraService {
   }
 
   @override
-  List<_i2.CameraDescription> get cameras => (super.noSuchMethod(
-        Invocation.getter(#cameras),
-        returnValue: <_i2.CameraDescription>[],
-      ) as List<_i2.CameraDescription>);
-  @override
   _i2.CameraController get cameraController => (super.noSuchMethod(
         Invocation.getter(#cameraController),
         returnValue: _FakeCameraController_0(
@@ -53,16 +48,6 @@ class MockCameraService extends _i1.Mock implements _i3.CameraService {
           Invocation.getter(#cameraController),
         ),
       ) as _i2.CameraController);
-  @override
-  _i4.Future<List<_i2.CameraDescription>> getListofCameras() =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #getListofCameras,
-          [],
-        ),
-        returnValue: _i4.Future<List<_i2.CameraDescription>>.value(
-            <_i2.CameraDescription>[]),
-      ) as _i4.Future<List<_i2.CameraDescription>>);
   @override
   _i4.Future<void> initialiseController() => (super.noSuchMethod(
         Invocation.method(
