@@ -14,9 +14,9 @@ samples, guidance on mobile development, and a full API reference.
 # FlutterFlowBank
 
 This is a Flutter app that onboards users to FlutterFlowBank. It's intended to be used with Android and iOS phones only.
-Before building and launching the application, please run ```flutter pub run build_runner build --delete-conflicting-outputs```. This will build all the generated dart models for serialization and mocks for the tests. 
+Before building and launching the application, please run ```flutter pub run build_runner build --delete-conflicting-outputs```. This will build all the generated dart models for serialization and mocks for the tests. Also, please ensure that you have Flutter 3.7.0 installed as that was the version used to build this app.  
 
-To get started, connect your device and run ```flutter run --release```.
+Once you've got that out of the way, connect your device and run ```flutter run --release```.
 
 
 ## Screenshots 
