@@ -31,7 +31,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
   final _formKey = GlobalKey<FormState>();
   PageController pageController = PageController(initialPage: 0);
   int pageIndex = 0;
-  CameraViewState cameraViewState = CameraViewState.Initial;
 
   late UserAccount userAccount;
   late Address address;
@@ -52,28 +51,22 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: cameraViewState != CameraViewState.Ready
-          ? AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  if (pageIndex > 0) {
-                    pageController.previousPage(
-                      duration: const Duration(milliseconds: 400),
-                      curve: Curves.linearToEaseOut,
-                    );
-                  } else {
-                    Navigator.pop(context);
-                  }
-                },
-              ),
-            )
-          : null,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (pageIndex > 0) {
+              pageController.previousPage(
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.linearToEaseOut,
+              );
+            } else {
+              Navigator.pop(context);
+            }
+          },
+        ),
+      ),
       body: Container(
-        padding: cameraViewState != CameraViewState.Ready
-            ? EdgeInsets.only(
-                left: Spacing.m, right: Spacing.m, bottom: Spacing.m)
-            : null,
         child: Form(
           key: _formKey,
           child: buildPageView(),
@@ -167,12 +160,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   Widget buildCameraStep() {
-    return LivenessCheckStep(
-      onCameraStatusChanged: (cameraStatus) {
-        setState(() {
-          cameraViewState = cameraStatus;
-        });
-      },
+    return LivenessStep(
       onLivenessComplete: (photo) {
         String encodedPhoto = base64Encode(photo);
         updateUserAccount(photo: encodedPhoto);

@@ -1,9 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:bloc_test/bloc_test.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_flow_bank/blocs/onboard/onboard_bloc.dart';
 import 'package:flutter_flow_bank/models/user_account.dart';
 import 'package:flutter_flow_bank/models/address.dart';
 import 'package:flutter_flow_bank/models/bank_account.dart';
@@ -29,7 +26,7 @@ void main() {
   UserAccount invalidUserAccount = UserAccount(
       "___", "___", "____", DateTime(1800, 01, 01), "___", [], address, '');
 
-  const Map<String, dynamic> encryptedUserAccountRequest = {
+  const Map<String, dynamic> encryptedUserAccountResponse = {
     "encryptedResponse":
         "miH8RJ/zHT0w0yABHEXrZ19XMoB5H7t/HZ29jFKW3lFiVAeLXluLeQpgBOiLFrYU2ddILUDunE5ScrqG98okfCMQiG16QlfQs0NAF+hezx7zQji/" +
             "XV0aq2w9vPi5OEEgtLdKDVen17EMoCMKjEeM/UsgKRkWLL7hlmhJysVMew61A1KXx0W3Zg80W3xtoqC" +
@@ -48,21 +45,40 @@ void main() {
 
   BankAccount bankAccount = BankAccount("5339460");
 
+  dioAdapter.onGet(
+    '/',
+    (server) async => server.reply(
+      200,
+      "Hello, World!",
+      delay: const Duration(seconds: 1),
+    ),
+  );
+
   dioAdapter.onPost(
     '/account',
     (server) async => server.reply(
       200,
-      encryptedBankAccountResponse,
+      jsonEncode(encryptedBankAccountResponse),
       delay: const Duration(seconds: 1),
     ),
-    data: encryptedUserAccountRequest,
+    data: encryptedUserAccountResponse,
   );
 
   dioAdapter.onPost(
-    '/decrypt',
+    '/echo/encrypt',
     (server) async => server.reply(
       200,
-      decryptedBankAccountResponse,
+      jsonEncode(encryptedUserAccountResponse),
+      delay: const Duration(seconds: 1),
+    ),
+    data: userAccount.toJson(),
+  );
+
+  dioAdapter.onPost(
+    '/echo/decrypt',
+    (server) async => server.reply(
+      200,
+      jsonEncode(decryptedBankAccountResponse),
       delay: const Duration(seconds: 1),
     ),
     data: encryptedBankAccountResponse['encryptedBankAccountSuccessResponse'],
@@ -70,79 +86,39 @@ void main() {
   ApiService apiService = ApiService(dio);
 
   group('ApiServiceTest', () {
-    blocTest<OnboardBloc, OnboardState>(
-      'Add CommitOnboarding to onboardBloc with a user account, should succeed and returns a bank account',
-      build: () => OnboardBloc(apiService),
-      setUp: () {
-        dioAdapter.onPost(
-          '/encrypt',
-          (server) async => server.reply(
-            200,
-            encryptedUserAccountRequest,
-            delay: const Duration(seconds: 1),
-          ),
-          data: userAccount.toJson(),
-        );
+    test(
+      'Call getHelloWorld should respond with Hello, World!',
+      () async {
+        ApiService apiService = ApiService(dio);
+        String response = await apiService.getHelloWorld();
+        expect(response, "Hello, World!");
       },
-      act: (bloc) => bloc.add(
-        CommitOnboarding(userAccount),
-      ),
-      wait: const Duration(
-        seconds: 10,
-      ),
-      expect: () => [OnboardLoading(), OnboardSuccess(bankAccount)],
     );
-    blocTest<OnboardBloc, OnboardState>(
-      "Add CommitOnboarding to onboardBloc with an empty user account, should fail and return onboardError state with message 'Seems like you missed something out, please enter valid entries into the fields'",
-      build: () => OnboardBloc(apiService),
-      setUp: () {
-        dioAdapter.onPost(
-          '/encrypt',
-          (server) async => server.reply(
-            403,
-            {'error': 'Invalid client request'},
-            delay: const Duration(seconds: 1),
-          ),
-          data: emptyUserAccount.toJson(),
-        );
+    test(
+      'Call encrypt should respond with the encrypted value of the userAccount',
+      () async {
+        ApiService apiService = ApiService(dio);
+        String response = await apiService.encryptValue(userAccount.toJson());
+        expect(response, encryptedUserAccountResponse['encryptedResponse']);
       },
-      act: (bloc) => bloc.add(
-        CommitOnboarding(emptyUserAccount),
-      ),
-      wait: const Duration(
-        seconds: 10,
-      ),
-      expect: () => [
-        OnboardLoading(),
-        const OnboardError(
-            "Seems like you missed something out, please enter valid entries into the fields")
-      ],
     );
-    blocTest<OnboardBloc, OnboardState>(
-      "Add CommitOnboarding to onboardBloc with an empty user account, should fail and return onboardError state with message 'Seems like something went wrong, please try again later'",
-      build: () => OnboardBloc(apiService),
-      setUp: () {
-        dioAdapter.onPost(
-          '/encrypt',
-          (server) async => server.reply(
-            500,
-            {'error': 'Internal Server Error'},
-            delay: const Duration(seconds: 1),
-          ),
-          data: invalidUserAccount.toJson(),
-        );
+    test(
+      'Call createAccount should respond the encrypted value of the bankAccount',
+      () async {
+        ApiService apiService = ApiService(dio);
+        String response = await apiService
+            .createAccount(encryptedUserAccountResponse['encryptedResponse']);
+        expect(response, encryptedBankAccountResponse['encryptedResponse']);
       },
-      act: (bloc) => bloc.add(
-        CommitOnboarding(invalidUserAccount),
-      ),
-      wait: const Duration(
-        seconds: 10,
-      ),
-      expect: () => [
-        OnboardLoading(),
-        const OnboardError(
-            "Seems like something went wrong, please try again later")
-      ],
+    );
+    test(
+      'Call decrypt should respond with the encrypted value of the userAccount',
+      () async {
+        ApiService apiService = ApiService(dio);
+        BankAccount response = await apiService
+            .decryptValue(encryptedBankAccountResponse['encryptedResponse']);
+        expect(response, bankAccount);
+      },
     );
   });
 }

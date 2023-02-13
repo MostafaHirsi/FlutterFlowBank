@@ -1,6 +1,6 @@
 final List<String> genderOptions = [
   "Male",
   "Female",
-  "Custom",
+  "Other",
   "Rather not say"
 ];

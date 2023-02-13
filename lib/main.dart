@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_flow_bank/models/bank_account.dart';
 import 'package:flutter_flow_bank/pages/success/success_page.dart';
 import 'package:flutter_flow_bank/services/api_service.dart';
+import 'package:flutter_flow_bank/services/camera_service.dart';
 import 'package:injector/injector.dart';
 import 'package:flutter_flow_bank/blocs/camera/camera_bloc.dart';
 import 'package:flutter_flow_bank/blocs/onboard/onboard_bloc.dart';
@@ -22,6 +23,7 @@ void main() {
   Dio dio = Dio();
   Injector.appInstance.registerDependency<Dio>(() => dio);
   Injector.appInstance.registerDependency<ApiService>(() => ApiService(dio));
+  Injector.appInstance.registerDependency<CameraService>(() => CameraService());
   runApp(const MainApp());
 }
 
@@ -31,6 +33,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ApiService apiService = Injector.appInstance.get<ApiService>();
+    CameraService cameraService = Injector.appInstance.get<CameraService>();
     return MaterialApp(
       theme: ThemeData(
         colorScheme: const ColorScheme(
@@ -123,7 +126,7 @@ class MainApp extends StatelessWidget {
                 return MultiBlocProvider(
                   providers: [
                     BlocProvider(
-                      create: (context) => CameraBloc(),
+                      create: (context) => CameraBloc(cameraService),
                     ),
                     BlocProvider(
                       create: (context) => OnboardBloc(apiService),

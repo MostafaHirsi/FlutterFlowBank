@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flow_bank/models/user_account.dart';
+import 'package:flutter_flow_bank/pages/onboarding/widgets/step_heading.dart';
+import 'package:flutter_flow_bank/utils/spacing.dart';
 import 'package:flutter_flow_bank/widgets/primary_button.dart';
 import 'package:flutter_flow_bank/widgets/text_form_field.dart';
 
@@ -20,37 +22,48 @@ class NameStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          child: ListView(
-            children: [
-              buildInputFormField(
-                  'First name',
-                  (onSaved) => onFirstNameSaved(onSaved),
-                  userAccount.firstName),
-              buildInputFormField(
-                  'Middle name',
-                  (onSaved) => onMiddleNameSaved(onSaved),
-                  userAccount.middleName),
-              buildInputFormField('Last name',
-                  (onSaved) => onLastNameSaved(onSaved), userAccount.lastName),
-            ],
+    return Container(
+      padding:
+          EdgeInsets.only(left: Spacing.m, right: Spacing.m, bottom: Spacing.m),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: ListView(
+              children: [
+                const StepHeading(
+                    heading: "Name",
+                    subHeading: "We need your name to verify your identity"),
+                buildInputFormField(
+                    'First name',
+                    (onSaved) => onFirstNameSaved(onSaved),
+                    userAccount.firstName),
+                buildInputFormField(
+                    'Middle name',
+                    (onSaved) => onMiddleNameSaved(onSaved),
+                    userAccount.middleName),
+                buildInputFormField(
+                    'Last name',
+                    (onSaved) => onLastNameSaved(onSaved),
+                    userAccount.lastName),
+              ],
+            ),
           ),
-        ),
-        PrimaryButton(
-          buttonText: 'Continue',
-          onPressed: validate,
-        ),
-      ],
+          PrimaryButton(
+            buttonText: 'Continue',
+            onPressed: validate,
+          ),
+        ],
+      ),
     );
   }
 
   InputFormField buildInputFormField(
-      String fieldName, Function(String?)? onSaved, String initialValue) {
+      String fieldName, Function(String) onSubmitted, String initialValue) {
     return InputFormField(
-      onSaved: (savedValue) => onSaved,
+      onFieldSubmitted: (savedValue) {
+        onSubmitted(savedValue);
+      },
       hintText: fieldName,
       initialValue: initialValue,
       textInputAction: TextInputAction.next,

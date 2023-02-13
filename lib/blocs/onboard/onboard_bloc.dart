@@ -28,17 +28,17 @@ class OnboardBloc extends Bloc<OnboardEvent, OnboardState> {
       } on DioError catch (dioError) {
         switch (dioError.response!.statusCode) {
           case 403:
-            emit(const OnboardError(
+            emit(OnboardError(
                 "Seems like you missed something out, please enter valid entries into the fields"));
             break;
           case 500:
           default:
-            emit(const OnboardError(
+            emit(OnboardError(
                 "Seems like something went wrong, please try again later"));
             break;
         }
       } catch (error) {
-        emit(const OnboardError(
+        emit(OnboardError(
             "Seems like something went wrong, please try again later"));
       }
     });

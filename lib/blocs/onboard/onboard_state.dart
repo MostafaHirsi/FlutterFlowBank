@@ -1,33 +1,29 @@
 part of 'onboard_bloc.dart';
 
 abstract class OnboardState extends Equatable {
-  const OnboardState();
+  final List<Object> restProps;
+  const OnboardState(this.restProps);
+
+  @override
+  List<Object> get props => restProps;
 }
 
 class OnboardInitial extends OnboardState {
-  @override
-  List<Object> get props => [];
+  OnboardInitial() : super([]);
 }
 
 class OnboardLoading extends OnboardState {
-  @override
-  List<Object> get props => [];
+  OnboardLoading() : super([]);
 }
 
 class OnboardSuccess extends OnboardState {
   final BankAccount bankAccount;
 
-  const OnboardSuccess(this.bankAccount);
-
-  @override
-  List<Object> get props => [bankAccount];
+  OnboardSuccess(this.bankAccount) : super([bankAccount]);
 }
 
 class OnboardError extends OnboardState {
   final String error;
 
-  const OnboardError(this.error);
-
-  @override
-  List<Object> get props => [error];
+  OnboardError(this.error) : super([error]);
 }
