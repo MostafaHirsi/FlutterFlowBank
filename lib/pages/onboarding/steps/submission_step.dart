@@ -35,7 +35,7 @@ class SubmissionStep extends StatelessWidget {
           PrimaryButton(
             icon: state is OnboardLoading ? buildLoadingIndicator() : null,
             buttonText: state is OnboardLoading ? "Submitting" : "Submit",
-            onPressed: state != OnboardLoading ? onSubmit : null,
+            onPressed: state is! OnboardLoading ? onSubmit : null,
           )
         ],
       ),
